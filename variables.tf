@@ -1,6 +1,3 @@
-variable "stage" {}
-variable "region" {}
-
 variable "retention_time" {
   default     = "14"
   description = "Is the number of days you want to keep the backups for (e.g. `14`)"

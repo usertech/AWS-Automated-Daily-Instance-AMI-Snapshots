@@ -1,6 +1,6 @@
 locals {
   module_relpath = "${substr(path.module, length(path.cwd) + 1, -1)}"
-  role_name      = "ec2-daily-snapshot-${var.stage}-${var.region}"
+  role_name      = "ec2-daily-snapshot"
 }
 
 data "aws_iam_policy_document" "default" {
