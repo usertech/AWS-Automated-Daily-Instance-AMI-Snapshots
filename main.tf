@@ -1,6 +1,5 @@
 locals {
-  module_relpath = "${substr(path.module, length(path.cwd) + 1, -1)}"
-  role_name      = "ec2-daily-snapshot-${var.stage}-${var.region}"
+  role_name = "ec2-daily-snapshot"
 }
 
 data "aws_iam_policy_document" "default" {
@@ -53,8 +52,8 @@ data "aws_iam_policy_document" "ami_backup" {
 
 data "archive_file" "ami_backup" {
   type        = "zip"
-  source_file = "${local.module_relpath}/handler.py"
-  output_path = "${local.module_relpath}/handler.zip"
+  source_file = "${path.module}/handler.py"
+  output_path = "${path.module}/handler.zip"
 }
 
 resource "aws_iam_role" "ami_backup" {
@@ -78,7 +77,7 @@ resource "aws_lambda_function" "ami_backup" {
   runtime          = "python3.6"
   source_code_hash = "${data.archive_file.ami_backup.output_base64sha256}"
 
-  environment = {
+  environment {
     variables = {
       DEFAULT_RETENTION_TIME = "${var.retention_time}"
       DRY_RUN                = "${var.dry_run}"
